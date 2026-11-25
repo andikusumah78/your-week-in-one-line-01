@@ -39,6 +39,11 @@ def main() -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="") as handle:
         handle.write(entry)
+    # Read back what was written and refuse to report success unless it
+    # is byte for byte the entry: the gate reads the file, not our memory.
+    with open(path, "r", encoding="utf-8", newline="") as handle:
+        if handle.read() != entry:
+            raise SystemExit("entry.txt does not match the entry")
     print(entry)
 
 
