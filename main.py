@@ -29,12 +29,17 @@ def output_path() -> str:
     return os.path.join(directory, "entry.txt")
 
 
-def main() -> None:
-    entry = ENTRY
+def validate_entry(entry: str) -> str:
+    """Check the entry is one clean line of 1 to MAX_CHARS characters."""
     if "\n" in entry or "\r" in entry:
         raise SystemExit("entry must be a single line")
     if not 1 <= len(entry) <= MAX_CHARS or entry != entry.strip():
         raise SystemExit("entry must be one line of 1 to 100 characters with no surrounding whitespace")
+    return entry
+
+
+def main() -> None:
+    entry = validate_entry(ENTRY)
     path = output_path()
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="") as handle:
